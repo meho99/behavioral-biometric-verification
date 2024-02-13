@@ -1,8 +1,9 @@
-import { put } from "typed-redux-saga";
+import { call, put } from "typed-redux-saga";
 import { RouterPaths } from "../../../router/router.paths";
 import { navigationActions } from "../../navigation/navigation.slice";
 import { notificationActions } from "../../notifications/notifications.slice";
 import { AuthActions, authActions } from "../auth.slice";
+import { signUp } from "../../../api/signUp";
 
 export function* signUpSaga({ payload }: AuthActions["signUp"]) {
   try {
@@ -12,6 +13,11 @@ export function* signUpSaga({ payload }: AuthActions["signUp"]) {
 
     // TODO: Remove when backend is ready
     const accessToken = "fake-access-token";
+
+    yield* call(signUp, {
+      email: payload.email,
+      password: payload.password,
+    });
 
     yield* put(authActions.signUpSuccess(accessToken));
     yield* put(authActions.fetchUser());

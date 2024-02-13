@@ -1,12 +1,19 @@
-import { put } from "typed-redux-saga";
+import { call, put } from "typed-redux-saga";
 import { RouterPaths } from "../../../router/router.paths";
 import { navigationActions } from "../../navigation/navigation.slice";
 import { notificationActions } from "../../notifications/notifications.slice";
 import { AuthActions, authActions } from "../auth.slice";
+import { login } from "../../../api/login";
 
 export function* loginSaga({ payload }: AuthActions["login"]) {
   try {
     localStorage.setItem("accessToken", "");
+
+    yield* call(login, {
+      email: payload.email,
+      password: payload.password,
+    });
+
     // TODO: Remove when backend is ready
     localStorage.setItem("userEmail", payload.email);
 
