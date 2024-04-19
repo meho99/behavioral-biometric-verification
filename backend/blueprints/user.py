@@ -1,22 +1,15 @@
-from flask import Flask, request
-from flask_cors import CORS
+from flask import Blueprint, request
 from faunadb import query as q
-from faunadb.objects import Ref
-from faunadb.client import FaunaClient
-from matplotlib import pyplot as plt
 
-app = Flask(__name__)
-CORS(app)
+from config import client
 
-client = FaunaClient(
-    secret="fnAFZl5kTNACUYNYKXzDXfHQwWxA6eSm0FL4wu9p",
-)
+user_bp = Blueprint("user", __name__, url_prefix="/user")
 
 # ----- Login to existing user -----
 
 
 # TODO: jwt tokens
-@app.route("/login", methods=["POST", "GET"])
+@user_bp.route("/login", methods=["POST"])
 def login():
     try:
         client.query(
@@ -40,7 +33,7 @@ def login():
 
 
 # TODO: jwt tokens
-@app.route("/signup", methods=["POST"])
+@user_bp.route("/signup", methods=["POST"])
 def sign_up():
     try:
         existing_user = client.query(
@@ -50,7 +43,7 @@ def sign_up():
         if existing_user:
             return "User already exists with this email. Please login.", 400
     except:
-        print("No existing user")
+        print("No existing user:")
 
     client.query(
         q.create(
@@ -67,16 +60,3 @@ def sign_up():
         "message": "Sign Up successful",
         "email": request.get_json()["email"],
     }
-
-
-# ----- Process and save mouse events -----
-@app.route("/mouse-events", methods=["POST"])
-def mouse_events():
-    # print(request.get_json())
-    plt.plot([1, 2, 3, 4])
-    # print(mock_stroke)
-
-
-if __name__ == "__main__":
-    # run app in debug mode on port 5000
-    app.run(debug=True)

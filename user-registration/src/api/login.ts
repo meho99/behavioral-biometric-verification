@@ -13,7 +13,7 @@ export type LoginResponse = {
 
 export const login = async (dto: LoginRequest): Promise<LoginResponse> => {
   const response = await axios.post<LoginResponse>(
-    "http://127.0.0.1:5000/login",
+    "http://127.0.0.1:5000/user/login",
     dto,
     {
       method: "POST",

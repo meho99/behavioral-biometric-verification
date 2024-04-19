@@ -3,7 +3,7 @@ import { LoginRequest, LoginResponse } from "./login";
 
 export const signUp = async (dto: LoginRequest): Promise<LoginResponse> => {
   const response = await axios.post<LoginResponse>(
-    "http://127.0.0.1:5000/signup",
+    "http://127.0.0.1:5000/user/signup",
     dto,
     {
       method: "POST",
