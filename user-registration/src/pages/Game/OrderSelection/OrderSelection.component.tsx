@@ -16,13 +16,11 @@ export const OrderSelection = () => {
   );
 
   const handleMouseClick = useCallback(() => {
-    console.log("click", mousePositions);
     dispatch(mouseEventsActions.postStroke(mousePositions));
     setMousePositions([]);
   }, [dispatch, mousePositions]);
 
   useEffect(() => {
-    console.log("DUPA");
 
     const handleMouseMove = (event: MouseEvent) => {
       setMousePositions((events) => [
@@ -34,7 +32,6 @@ export const OrderSelection = () => {
     window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      console.log("PIES");
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, [dispatch]);

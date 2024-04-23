@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "version": "1.0.0",
+  "name": "Biometric Identification",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "scripting",
+    "alarms",
+    "activeTab",
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "icons": {
+    "32": "icon32.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "run_at": "document_start",
+      "persist_across_sessions": true,
+      "js": [
+        "content.js"
+      ]
+    }
+  ]
+}
