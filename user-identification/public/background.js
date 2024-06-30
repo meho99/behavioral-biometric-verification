@@ -1,7 +1,38 @@
 const MAX_STROKE_TIME = 10 * 1000;
 
 let mousePositions = [];
+let allPositionsToSend = [];
 let userEmail;
+
+let verificationStatuses = [];
+let finalVerificationResults = [];
+
+const verifyStrokeOwner = async (dto) => {
+  const response = await fetch("http://127.0.0.1:5000/strokes/verify", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      "Access-Control-Allow-Origin": "*",
+    },
+    body: JSON.stringify(dto),
+  });
+
+  verificationStatuses.push(response.status === 200 ? "success" : "failed");
+
+  if (verificationStatuses.length >= 5) {
+    const successCount = verificationStatuses.filter(
+      (status) => status === "success"
+    ).length;
+
+    if (successCount >= 3) {
+      finalVerificationResults.push("success");
+    } else {
+      finalVerificationResults.push("failed");
+    }
+
+    verificationStatuses = [];
+  }
+};
 
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Extension installed!");
@@ -35,17 +66,22 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.eventType === "loginCompleted") {
     console.log("Login completed", message.eventDetails);
     userEmail = message.eventDetails.email;
+
+    return;
   }
 
   if (message.eventType === "mouseMove") {
-    if (!!userEmail) {
+    if (userEmail) {
       mousePositions.push(message.eventDetails);
     }
+
+    return;
   }
 
   if (message.eventType === "mouseDown") {
     console.log("Mouse down event received", mousePositions);
     const cleanedEvents = removeNullSpaceEvents(mousePositions);
+    mousePositions = [];
 
     if (cleanedEvents.length < 4) {
       console.log("stroke ignored because it has less than 4 events");
@@ -61,8 +97,25 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       return;
     }
 
-    // send to server somehow
+    allPositionsToSend.push(cleanedEvents);
 
-    mousePositions = [];
+    if (allPositionsToSend.length >= 5) {
+      console.log("Sending all positions", allPositionsToSend);
+      for (const events of allPositionsToSend) {
+        verifyStrokeOwner({
+          email: userEmail,
+          events,
+        });
+      }
+
+      allPositionsToSend = [];
+    }
+
+    return;
+  }
+
+  if (message.eventType === "getVerificationStatuses") {
+    sendResponse(finalVerificationResults);
+    finalVerificationResults = [];
   }
 });
