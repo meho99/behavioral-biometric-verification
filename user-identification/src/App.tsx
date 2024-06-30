@@ -1,50 +1,38 @@
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Login } from "./Login/Login";
+import { Container, Typography } from "@mui/material";
+import { Authenticated } from "./Authenticated/Authenticated";
 
 function App() {
-  const onClick = async () => {
-    let [tab] = await chrome.tabs.query({
-      active: true,
-    });
+  const [loginEmail, setLoginEmail] = useState<string>();
 
-    chrome.scripting.executeScript({
-      target: { tabId: tab.id! },
-      func: () => {
-        chrome.runtime.sendMessage({
-          eventType: "loginCompleted",
-          eventDetails: {
-            email: "michal.t1506@gmail.com",
-          },
-        });
-      },
-    });
-  };
+  useEffect(() => {
+    const handleCheckCurrentUser = async () => {
+      chrome.runtime.sendMessage({ eventType: "getUserEmail" }, (email) => {
+        setLoginEmail(email);
+      });
+    };
 
-  useEffect(() => {}, []);
+    handleCheckCurrentUser();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={onClick}>Pies</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Container
+      sx={{
+        width: "450px",
+        borderColor: "primary.main",
+        borderWidth: 2,
+        borderStyle: "solid",
+      }}
+    >
+      <Typography variant="h1">Mouse Movement Verification</Typography>
+
+      {loginEmail ? (
+        <Authenticated loginEmail={loginEmail} setLoginEmail={setLoginEmail} />
+      ) : (
+        <Login setLoginEmail={setLoginEmail} />
+      )}
+    </Container>
   );
 }
 

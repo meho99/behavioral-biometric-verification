@@ -3,32 +3,33 @@ import { TypographyVariantsOptions } from "@mui/material";
 
 export const getTypography = (palette: Palette): TypographyVariantsOptions => ({
   fontFamily: ["Roboto", "Montserrat"].join(","),
-  fontSize: 14,
+  fontSize: 12,
   h1: {
-    fontSize: "36px",
+    fontSize: "28px",
     textAlign: "center",
-    color: palette.primary?.main,
-    marginBottom: "14px",
     fontWeight: 600,
+    color: palette.primary?.main,
   },
   h2: {
-    fontSize: "28px",
+    fontSize: "20px",
+    textAlign: "center",
+    lineHeight: "15px",
   },
   h3: {
-    fontSize: "24px",
+    fontSize: "18px",
   },
   h4: {
-    fontSize: "20px",
+    fontSize: "16px",
   },
   h5: {
-    fontSize: "17px",
+    fontSize: "14px",
   },
   h6: {
-    fontSize: "15px",
+    fontSize: "12px",
   },
   body1: {},
   body2: {
-    fontSize: "13px",
+    fontSize: "11px",
   },
   subtitle1: {
     fontSize: 15,
@@ -38,11 +39,11 @@ export const getTypography = (palette: Palette): TypographyVariantsOptions => ({
     fontSize: 15,
   },
   button: {
-    fontSize: "19px",
+    fontSize: "17px",
     textTransform: "none",
     fontWeight: 600,
   },
   caption: {
-    fontSize: "15px",
+    fontSize: "13px",
   },
 });

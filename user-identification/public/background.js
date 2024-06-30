@@ -70,16 +70,34 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     return;
   }
 
+  if (message.eventType === "logoutCompleted") {
+    console.log("Logout completed");
+    userEmail = undefined;
+    mousePositions = [];
+    allPositionsToSend = [];
+    verificationStatuses = [];
+    finalVerificationResults = [];
+
+    return;
+  }
+
   if (message.eventType === "mouseMove") {
-    if (userEmail) {
-      mousePositions.push(message.eventDetails);
+    if (!userEmail) {
+      return;
     }
+
+    mousePositions.push(message.eventDetails);
 
     return;
   }
 
   if (message.eventType === "mouseDown") {
     console.log("Mouse down event received", mousePositions);
+    if (!userEmail) {
+      console.log("User not logged in");
+      return;
+    }
+
     const cleanedEvents = removeNullSpaceEvents(mousePositions);
     mousePositions = [];
 
@@ -112,6 +130,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     }
 
     return;
+  }
+
+  if (message.eventType === "getUserEmail") {
+    sendResponse(userEmail);
   }
 
   if (message.eventType === "getVerificationStatuses") {
