@@ -1,21 +1,46 @@
 import { Components, Palette, Theme } from "@mui/material";
 
-// import MontserratMedium from "../assets/fonts/Montserrat-Medium.ttf";
-// import MontserratSemiBold from "../assets/fonts/Montserrat-SemiBold.ttf";
-// import MontserratBold from "../assets/fonts/Montserrat-Bold.ttf";
+import InterMedium from "../assets/fonts/Inter-Medium.ttf";
+import InterSemiBold from "../assets/fonts/Inter-Bold.ttf";
+import InterBold from "../assets/fonts/Inter-ExtraBold.ttf";
 
-export const getComponents = (_palette: Palette): Components<Theme> => {
+export const getComponents = (palette: Palette): Components<Theme> => {
   return {
     MuiCssBaseline: {
       styleOverrides: `
       body {
         overflow: overlay;
       }
+
+      @font-face {
+        font-family: Inter;
+        src: url(${InterMedium}) format("truetype");
+        font-weight: normal;
+      }
+  
+      @font-face {
+        font-family: Inter;
+        src: url(${InterSemiBold}) format("truetype");
+        font-weight: 600;
+      }
+  
+      @font-face {
+        font-family: Inter;
+        src: url(${InterBold}) format("truetype");
+        font-weight: 700;
+      }
+
       `,
     },
     MuiButton: {
       defaultProps: {
         variant: "contained",
+      },
+
+      styleOverrides: {
+        contained: {
+          color: palette.background.default,
+        },
       },
     },
     MuiContainer: {
@@ -34,6 +59,8 @@ export const getComponents = (_palette: Palette): Components<Theme> => {
         disableGutters: {
           paddingLeft: 0,
           paddingRight: 0,
+          paddingBottom: 0,
+          paddingTop: 0,
         },
       },
       defaultProps: {
@@ -52,6 +79,29 @@ export const getComponents = (_palette: Palette): Components<Theme> => {
       styleOverrides: {
         root: {
           top: "-5px",
+        },
+      },
+    },
+
+    MuiTableCell: {
+      styleOverrides: {
+        head: {
+          fontWeight: 600,
+          fontSize: 13,
+          lineHeight: "10px",
+          color: palette.background.default,
+        },
+        root: {
+          fontSize: 12,
+          paddingTop: 10,
+          paddingBottom: 10,
+        },
+      },
+    },
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          backgroundColor: palette.primary.main,
         },
       },
     },

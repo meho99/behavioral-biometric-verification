@@ -1,4 +1,4 @@
-import { Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { ControlledInput } from "../components/TextInput";
 import { Button } from "../components/Button";
 import { useForm } from "react-hook-form";
@@ -84,14 +84,16 @@ export const Login = ({ setLoginEmail }: LoginProps) => {
         title="Password"
       />
 
-      <Button
-        sx={{ mt: 3 }}
-        type="submit"
-        disabled={isSubmitted && !isValid}
-        isLoading={loginStatus === "loading"}
-      >
-        Login
-      </Button>
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+        <Button
+          sx={{ mt: 3, width: 200 }}
+          type="submit"
+          disabled={isSubmitted && !isValid}
+          isLoading={loginStatus === "loading"}
+        >
+          Login
+        </Button>
+      </Box>
     </Container>
   );
 };

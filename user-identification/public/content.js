@@ -1,3 +1,5 @@
+let latestVerificationStatus = null;
+
 const handleMouseMove = (event) => {
   chrome.runtime.sendMessage({
     eventType: "mouseMove",
@@ -16,12 +18,27 @@ const handleMouseDown = () => {
 const handleCheckStatuses = () => {
   console.log("Checking statuses");
   chrome.runtime.sendMessage(
-    { eventType: "getVerificationStatuses" },
-    (statuses) => {
-      console.log("Received statuses", statuses);
-      if (statuses.includes("failed")) {
+    { eventType: "getUserData" },
+    ({ finalVerificationResults }) => {
+      console.log("Received statuses", finalVerificationResults);
+
+      const newStatuses = finalVerificationResults
+        .filter(({ timestamp }) => {
+          if (!latestVerificationStatus) {
+            return true;
+          }
+          return timestamp > latestVerificationStatus.timestamp;
+        })
+        .map(({ status }) => status);
+
+      console.log("newStatuses", newStatuses);
+
+      if (newStatuses.includes("failed")) {
         alert("This computer is not used by the authorized user!");
       }
+
+      latestVerificationStatus =
+        finalVerificationResults[finalVerificationResults.length - 1];
     }
   );
 };
@@ -32,7 +49,7 @@ const main = () => {
   document.addEventListener("mousemove", handleMouseMove);
   document.addEventListener("mousedown", handleMouseDown);
 
-  checkStatusesInterval = setInterval(handleCheckStatuses, 10000);
+  checkStatusesInterval = setInterval(handleCheckStatuses, 15 * 1000);
 };
 
 const destructionEvent = "destructmyextension_" + chrome.runtime.id;

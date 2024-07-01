@@ -25,9 +25,15 @@ const verifyStrokeOwner = async (dto) => {
     ).length;
 
     if (successCount >= 3) {
-      finalVerificationResults.push("success");
+      finalVerificationResults.push({
+        status: "success",
+        timestamp: new Date().getTime(),
+      });
     } else {
-      finalVerificationResults.push("failed");
+      finalVerificationResults.push({
+        status: "failed",
+        timestamp: new Date().getTime(),
+      });
     }
 
     verificationStatuses = [];
@@ -132,12 +138,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     return;
   }
 
-  if (message.eventType === "getUserEmail") {
-    sendResponse(userEmail);
-  }
-
-  if (message.eventType === "getVerificationStatuses") {
-    sendResponse(finalVerificationResults);
-    finalVerificationResults = [];
+  if (message.eventType === "getUserData") {
+    sendResponse({
+      userEmail,
+      finalVerificationResults,
+    });
   }
 });
