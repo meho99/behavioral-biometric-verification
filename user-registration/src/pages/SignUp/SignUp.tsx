@@ -1,4 +1,4 @@
-import { Container, Typography, Link as MuiLink } from "@mui/material";
+import { Container, Typography, Link as MuiLink, Box } from "@mui/material";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import { authActions } from "../../store/auth/auth.slice";
 import { SignUpValues } from "./SignUp.types";
 import { Link } from "react-router-dom";
 import { RouterPaths } from "../../router/router.paths";
+import { ButtonsContainer } from "../../components/ButtonsContainer/ButtonsContainer.component";
 
 export const SignUp = () => {
   const dispatch = useDispatch();
@@ -50,9 +51,13 @@ export const SignUp = () => {
     <Container
       component="form"
       onSubmit={handleSubmit(onSubmit)}
-      sx={{ gap: 2 }}
+      sx={{ gap: 2, minWidth: 700 }}
     >
-      <Typography variant="h1">Create Your Account</Typography>
+      <Box>
+        <Typography variant="h1">Mouse Movement Verification</Typography>
+        <Typography variant="h2">Create Your Account</Typography>
+      </Box>
+
       <ControlledInput
         sx={{ mt: 3 }}
         autoFocus
@@ -80,21 +85,24 @@ export const SignUp = () => {
             value === passwordValue || "The passwords do not match",
         }}
       />
-      <Button
-        sx={{ mt: 3 }}
-        type="submit"
-        disabled={isSubmitted && !isValid}
-        isLoading={signUpStatus === "loading"}
-      >
-        Submit
-      </Button>
 
-      <Typography>
-        Already have an account?{" "}
-        <MuiLink component={Link} to={RouterPaths.Login}>
-          Login
-        </MuiLink>
-      </Typography>
+      <ButtonsContainer>
+        <Button
+          sx={{ mt: 3, width: 400 }}
+          type="submit"
+          disabled={isSubmitted && !isValid}
+          isLoading={signUpStatus === "loading"}
+        >
+          Submit
+        </Button>
+
+        <Typography>
+          Already have an account?{" "}
+          <MuiLink component={Link} to={RouterPaths.Login}>
+            Login
+          </MuiLink>
+        </Typography>
+      </ButtonsContainer>
     </Container>
   );
 };

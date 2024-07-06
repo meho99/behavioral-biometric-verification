@@ -33,6 +33,13 @@ export const OrderSelectionItem = ({
               backgroundColor: color,
               width: BLOCK_SIZE,
               height: BLOCK_SIZE,
+              borderRadius: "10px",
+              boxShadow: ({ palette }) => {
+                const darkColor = palette.augmentColor({
+                  color: { main: color },
+                }).dark;
+                return `0px 0px 15px 1px ${darkColor}}`;
+              },
             }}
           />
         </IconButton>

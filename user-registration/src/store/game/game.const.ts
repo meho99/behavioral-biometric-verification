@@ -1,10 +1,10 @@
 export const GAME_COLORS = [
-  "#FF0000",
-  "#00FF00",
-  "#0000FF",
-  "#FFFF00",
-  "#FF00FF",
-  "#00FFFF",
+  "#8A1E00",
+  "#54B88D",
+  "#00C9D4",
+  "#F9F871",
+  "#B55A7A",
+  "#95B0B1",
 ];
 
 export const BOARD_HEIGHT = 500;

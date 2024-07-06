@@ -1,21 +1,56 @@
 import { Components, Palette, Theme } from "@mui/material";
 
-// import MontserratMedium from "../assets/fonts/Montserrat-Medium.ttf";
-// import MontserratSemiBold from "../assets/fonts/Montserrat-SemiBold.ttf";
-// import MontserratBold from "../assets/fonts/Montserrat-Bold.ttf";
+import InterMedium from "../assets/fonts/Inter-Medium.ttf";
+import InterSemiBold from "../assets/fonts/Inter-Bold.ttf";
+import InterBold from "../assets/fonts/Inter-ExtraBold.ttf";
 
-export const getComponents = (_palette: Palette): Components<Theme> => {
+export const getComponents = (palette: Palette): Components<Theme> => {
   return {
     MuiCssBaseline: {
       styleOverrides: `
       body {
         overflow: overlay;
       }
+
+      @font-face {
+        font-family: Inter;
+        src: url(${InterMedium}) format("truetype");
+        font-weight: normal;
+      }
+  
+      @font-face {
+        font-family: Inter;
+        src: url(${InterSemiBold}) format("truetype");
+        font-weight: 600;
+      }
+  
+      @font-face {
+        font-family: Inter;
+        src: url(${InterBold}) format("truetype");
+        font-weight: 700;
+      }
+
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover, 
+      input:-webkit-autofill:focus, 
+      input:-webkit-autofill:active{
+      -webkit-box-shadow: 0 0 0 30px ${palette.background.paper} inset !important;
+}
+
       `,
     },
     MuiButton: {
       defaultProps: {
         variant: "contained",
+      },
+
+      styleOverrides: {
+        contained: {
+          color: palette.background.default,
+        },
+        sizeMedium: {
+          width: 400,
+        },
       },
     },
     MuiContainer: {
@@ -26,14 +61,61 @@ export const getComponents = (_palette: Palette): Components<Theme> => {
           justifyContent: "flex-start",
           overflowX: "hidden",
           height: "100%",
-          paddingTop: 25,
-          paddingBottom: 25,
-          paddingLeft: 20,
-          paddingRight: 20,
+          paddingTop: "30px !important",
+          paddingBottom: "30px !important",
+          paddingLeft: "35px !important",
+          paddingRight: "35px !important",
+        },
+        disableGutters: {
+          paddingLeft: 0,
+          paddingRight: 0,
+          paddingBottom: 0,
+          paddingTop: 0,
         },
       },
       defaultProps: {
         maxWidth: false,
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        input: {
+          paddingTop: 10,
+          paddingBottom: 10,
+          "& :focus": {
+            outline: "none",
+          },
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          top: "-5px",
+        },
+      },
+    },
+
+    MuiTableCell: {
+      styleOverrides: {
+        head: {
+          fontWeight: 600,
+          fontSize: 13,
+          lineHeight: "10px",
+          color: palette.background.default,
+        },
+        root: {
+          fontSize: 12,
+          paddingTop: 10,
+          paddingBottom: 10,
+        },
+      },
+    },
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          backgroundColor: palette.primary.main,
+        },
       },
     },
   };

@@ -5,8 +5,16 @@ import { RouterPaths } from "../../../router/router.paths";
 
 export const GameCompleted = () => {
   return (
-    <Box sx={{ mt: 3, display: "flex", flexDirection: "column", gap: 3 }}>
-      <Typography variant="h3" color="primary">
+    <Box
+      sx={{
+        mt: 3,
+        display: "flex",
+        flexDirection: "column",
+        gap: 3,
+        alignItems: "center",
+      }}
+    >
+      <Typography variant="h3" color="primary" fontSize={27}>
         Game completed!
       </Typography>
       <Typography variant="h3">

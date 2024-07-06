@@ -13,10 +13,19 @@ export const StartNext = () => {
   };
 
   return (
-    <Box sx={{ mt: 3, display: "flex", flexDirection: "column", gap: 3 }}>
-      <Typography variant="h3" color="primary">
+    <Box
+      sx={{
+        mt: 3,
+        display: "flex",
+        flexDirection: "column",
+        gap: 3,
+        alignItems: "center",
+      }}
+    >
+      <Typography variant="h3" color="primary" fontSize={27}>
         {round} round completed!
       </Typography>
+
       <Typography variant="h3">Are you ready to start the next one?</Typography>
 
       <Button onClick={handleStartNextRound}>Start</Button>

@@ -15,13 +15,35 @@ import { CircularProgressBox } from "../components/CircularProgressBox";
 
 export const BaseLayout = () => {
   return (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          py: 2,
+          px: 2,
+          backgroundColor: "background.paper",
+          borderBottom: "1px solid #4a4a4a",
+        }}
+      >
+        <Typography variant="h3" color="primary">
+          Mouse Movement Verification
+        </Typography>
+      </Box>
+
       <Box
         sx={{
           mt: 10,
           maxWidth: 1200,
-          width: "100%",
           backgroundColor: "background.paper",
+          border: "1px solid #4a4a4a",
         }}
       >
         <Outlet />
@@ -59,22 +81,33 @@ export const AuthenticatedLayout = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-end",
-          gap: 2,
+          justifyContent: "space-between",
           width: "100%",
+          py: 2,
+          px: 2,
+          backgroundColor: "background.paper",
+          borderBottom: "1px solid #4a4a4a",
         }}
       >
-        <Typography variant="h5">user: {user?.email}</Typography>
-        <Button size="small" onClick={handleLogOut}>
-          Log out
-        </Button>
+        <Typography variant="h3" color="primary">
+          Mouse Movement Verification
+        </Typography>
+
+        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+          <Typography variant="h5">user: {user?.email}</Typography>
+          <Button size="small" onClick={handleLogOut}>
+            Log out
+          </Button>
+        </Box>
       </Box>
+
       <Box
         sx={{
           mt: 8,
           maxWidth: 1200,
           width: "100%",
           backgroundColor: "background.paper",
+          border: "1px solid #4a4a4a",
         }}
       >
         {isUserLoading ? <CircularProgressBox /> : <Outlet />}

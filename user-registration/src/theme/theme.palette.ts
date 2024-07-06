@@ -11,22 +11,26 @@ declare module "@mui/material/Checkbox" {
 export const getPalette = () =>
   createPalette({
     mode: "dark",
-    // primary: {
-    //   // main: "red",
-    // },
+    primary: {
+      main: "#308284",
+    },
     // secondary: {},
-    // success: {},
+    success: {
+      main: "#308284",
+    },
     // info: {},
-    // error: {},
+    error: {
+      main: "#f33738",
+    },
     // warning: {},
     text: {
-      // primary: "#2A3755",
-      // disabled: "#9B9B9B",
-      // secondary: "#545778",
+      primary: "#D8D8D8",
+      disabled: "#9B9B9B",
+      // secondary: "#707070",
     },
 
     background: {
-      default: "#242424",
+      default: "#1a1a1a",
       paper: "#121212",
     },
   });

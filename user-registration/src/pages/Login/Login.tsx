@@ -1,4 +1,4 @@
-import { Container, Typography, Link as MuiLink } from "@mui/material";
+import { Container, Typography, Link as MuiLink, Box } from "@mui/material";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import { authActions } from "../../store/auth/auth.slice";
 import { LoginValues } from "./Login.types";
 import { RouterPaths } from "../../router/router.paths";
 import { Link } from "react-router-dom";
+import { ButtonsContainer } from "../../components/ButtonsContainer/ButtonsContainer.component";
 
 export const Login = () => {
   const dispatch = useDispatch();
@@ -37,9 +38,12 @@ export const Login = () => {
     <Container
       component="form"
       onSubmit={handleSubmit(onSubmit)}
-      sx={{ gap: 2 }}
+      sx={{ gap: 2, minWidth: 700 }}
     >
-      <Typography variant="h1">Login To Existing Account</Typography>
+      <Box>
+        <Typography variant="h1">Mouse Movement Verification</Typography>
+        <Typography variant="h2">Login To Existing Account</Typography>
+      </Box>
 
       <ControlledInput
         sx={{ mt: 3 }}
@@ -59,21 +63,23 @@ export const Login = () => {
         title="Password"
       />
 
-      <Button
-        sx={{ mt: 3 }}
-        type="submit"
-        disabled={isSubmitted && !isValid}
-        isLoading={signUpStatus === "loading"}
-      >
-        Submit
-      </Button>
+      <ButtonsContainer>
+        <Button
+          sx={{ mt: 3, width: 400 }}
+          type="submit"
+          disabled={isSubmitted && !isValid}
+          isLoading={signUpStatus === "loading"}
+        >
+          Login
+        </Button>
 
-      <Typography>
-        Don't have an account?{" "}
-        <MuiLink component={Link} to={RouterPaths.Register}>
-          Register
-        </MuiLink>
-      </Typography>
+        <Typography>
+          Don't have an account?{" "}
+          <MuiLink component={Link} to={RouterPaths.Register}>
+            Register
+          </MuiLink>
+        </Typography>
+      </ButtonsContainer>
     </Container>
   );
 };

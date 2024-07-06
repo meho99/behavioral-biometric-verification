@@ -4,6 +4,7 @@ import { Button } from "../../components/Button";
 import { userSelector } from "../../store/auth/auth.selectors";
 import { Link } from "react-router-dom";
 import { RouterPaths } from "../../router/router.paths";
+import { ButtonsContainer } from "../../components/ButtonsContainer/ButtonsContainer.component";
 
 export const Home = () => {
   const user = useSelector(userSelector);
@@ -25,9 +26,15 @@ export const Home = () => {
             Note: You wont be able to use the app until you finish the game.
           </Typography>
 
-          <Button component={Link} to={RouterPaths.GameTutorial} sx={{ mt: 3 }}>
-            Start now
-          </Button>
+          <ButtonsContainer>
+            <Button
+              component={Link}
+              to={RouterPaths.GameTutorial}
+              sx={{ mt: 3, width: 400 }}
+            >
+              Start now
+            </Button>
+          </ButtonsContainer>
         </>
       )}
     </Container>

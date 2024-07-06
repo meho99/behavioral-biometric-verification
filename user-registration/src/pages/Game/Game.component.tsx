@@ -33,8 +33,18 @@ export const Game = () => {
   return (
     <Container>
       <Typography variant="h1">Game</Typography>
-      <Typography variant="h3">Round: {round}</Typography>
-      <Typography variant="h3">Score: {score}</Typography>
+      <Typography variant="h3">
+        Round:{" "}
+        <Typography component="span" color="primary" variant="h3" fontSize={22}>
+          {round}
+        </Typography>
+      </Typography>
+      <Typography mt={1} variant="h3">
+        Score:{" "}
+        <Typography component="span" color="primary" variant="h3" fontSize={22}>
+          {score}
+        </Typography>
+      </Typography>
 
       {roundStep === RoundStep.OrderPresentation && <OrderPresentation />}
       {roundStep === RoundStep.OrderSelection && <OrderSelection />}
