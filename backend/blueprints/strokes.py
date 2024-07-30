@@ -7,7 +7,7 @@ from config import client
 
 strokes_bp = Blueprint("strokes", __name__, url_prefix="/strokes")
 
-imported_model = joblib.load("./models/bagging_classifier_model.joblib")
+imported_model = joblib.load("./models/bagging_classifier_model_2.joblib")
 
 
 def euclidean_distance(point1, point2):

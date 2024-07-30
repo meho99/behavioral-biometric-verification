@@ -10,40 +10,31 @@ import { RequestStatus } from "../types";
 export const Login = ({ setLoginEmail }: LoginProps) => {
   const [loginStatus, setLoginStatus] = useState<RequestStatus>("idle");
 
-  const onSubmit = useCallback(({ email, password }: LoginValues) => {
-    const handleLogin = async () => {
-      setLoginStatus("loading");
-      try {
-        // Login user
-        await login({ email, password });
+  const onSubmit = useCallback(
+    ({ email, password }: LoginValues) => {
+      const handleLogin = async () => {
+        setLoginStatus("loading");
+        try {
+          // Login user
+          await login({ email, password });
 
-        // Start background script
-        let [tab] = await chrome.tabs.query({
-          active: true,
-        });
+          await chrome.runtime.sendMessage({
+            eventType: "loginCompleted",
+            eventDetails: { email: email },
+          });
 
-        await chrome.scripting.executeScript({
-          target: { tabId: tab.id! },
-          func: () => {
-            chrome.runtime.sendMessage({
-              eventType: "loginCompleted",
-              eventDetails: {
-                email: "michal.t1506@gmail.com",
-              },
-            });
-          },
-        });
+          setLoginEmail(email);
+          setLoginStatus("success");
+        } catch (error) {
+          console.error(error);
+          setLoginStatus("error");
+        }
+      };
 
-        setLoginEmail(email);
-        setLoginStatus("success");
-      } catch (error) {
-        console.error(error);
-        setLoginStatus("error");
-      }
-    };
-
-    handleLogin();
-  }, []);
+      handleLogin();
+    },
+    [setLoginEmail]
+  );
 
   const {
     control,

@@ -30,6 +30,12 @@ export const getComponents = (palette: Palette): Components<Theme> => {
         font-weight: 700;
       }
 
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover, 
+      input:-webkit-autofill:focus, 
+      input:-webkit-autofill:active{
+      -webkit-box-shadow: 0 0 0 30px ${palette.background.default} inset !important;
+
       `,
     },
     MuiButton: {
