@@ -7,13 +7,15 @@ from config import client
 
 strokes_bp = Blueprint("strokes", __name__, url_prefix="/strokes")
 
-imported_model = joblib.load("./models/bagging_classifier_model_2.joblib")
+imported_model = joblib.load("./models/rf_classifier_model_4.joblib")
 
 
 def euclidean_distance(point1, point2):
-    return abs(
-        np.sqrt((point2["x"] - point1["x"]) ** 2 + (point2["y"] - point1["y"]) ** 2)
-    )
+    return np.sqrt((point2["x"] - point1["x"]) ** 2 + (point2["y"] - point1["y"]) ** 2)
+
+
+def euclidean_distance_abs(point1, point2):
+    return abs(euclidean_distance(point1, point2))
 
 
 def mean(numbers):
@@ -85,7 +87,7 @@ def process_stroke(events):
     distances_y = [0]
 
     for i in range(len(events) - 1):
-        distance = euclidean_distance(events[i], events[i + 1])
+        distance = euclidean_distance_abs(events[i], events[i + 1])
         distances.append(distance)
         cumulative_sum += distance
 
@@ -99,10 +101,30 @@ def process_stroke(events):
 
     cumulative_sum_interpolated = 0
 
+    x_axis_angles_accumulated = [0]
+    curvatures = [0]
+    curvatures_square = [0]
+    accumulated_angles = 0
+
     for i in range(len(interpolated_data) - 1):
-        distance = euclidean_distance(interpolated_data[i], interpolated_data[i + 1])
-        distances.append(distance)
-        cumulative_sum_interpolated += distance
+        distance_abs = euclidean_distance_abs(
+            interpolated_data[i], interpolated_data[i + 1]
+        )
+
+        cumulative_sum_interpolated += distance_abs
+
+        distance_x = interpolated_data[i + 1]["x"] - interpolated_data[i]["x"]
+        distance_y = interpolated_data[i + 1]["y"] - interpolated_data[i]["y"]
+
+        x_axis_angle = math.atan2(distance_y, distance_x)
+        accumulated_angles += x_axis_angle
+
+        x_axis_angles_accumulated.append(accumulated_angles)
+
+        curvature = x_axis_angle / distance if distance != 0 else 0
+        curvatures.append(curvature)
+        curvature_square = curvature / distance if curvature != 0 else 0
+        curvatures_square.append(curvature_square)
 
     # ----- Velocities -----
 
@@ -159,7 +181,7 @@ def process_stroke(events):
 
     # ----- Straightness ----
 
-    straightness = (euclidean_distance(events[0], events[-1])) / cumulative_sum
+    straightness = (euclidean_distance_abs(events[0], events[-1])) / cumulative_sum
 
     #  ----- Jitter -----
 
@@ -179,6 +201,9 @@ def process_stroke(events):
     vel_y_stats = get_statistics(initial_velocities_y)
     accelerations_x = get_statistics(accelerations_x)
     accelerations_y = get_statistics(accelerations_y)
+    x_axis_angles_stats = get_statistics(x_axis_angles_accumulated)
+    curvatures_stats = get_statistics(curvatures)
+    curvatures_square_stats = get_statistics(curvatures_square)
 
     combined_stats = {
         "velocity_x_min": vel_x_stats["min"],
@@ -201,6 +226,25 @@ def process_stroke(events):
         "accelerations_y_mean": accelerations_y["mean"],
         "accelerations_y_standard_deviation": accelerations_y["standard_deviation"],
         "accelerations_y_min_max_difference": accelerations_y["min_max_difference"],
+        "x_axis_angles_min": x_axis_angles_stats["min"],
+        "x_axis_angles_max": x_axis_angles_stats["max"],
+        "x_axis_angles_mean": x_axis_angles_stats["mean"],
+        "x_axis_angles_standard_deviation": x_axis_angles_stats["standard_deviation"],
+        "x_axis_angles_min_max_difference": x_axis_angles_stats["min_max_difference"],
+        "curvatures_min": curvatures_stats["min"],
+        "curvatures_max": curvatures_stats["max"],
+        "curvatures_mean": curvatures_stats["mean"],
+        "curvatures_standard_deviation": curvatures_stats["standard_deviation"],
+        "curvatures_min_max_difference": curvatures_stats["min_max_difference"],
+        "curvatures_square_min": curvatures_square_stats["min"],
+        "curvatures_square_max": curvatures_square_stats["max"],
+        "curvatures_square_mean": curvatures_square_stats["mean"],
+        "curvatures_square_standard_deviation": curvatures_square_stats[
+            "standard_deviation"
+        ],
+        "curvatures_square_min_max_difference": curvatures_square_stats[
+            "min_max_difference"
+        ],
         "straightness": straightness,
         "jitter": jitter,
         "number_of_pauses": pauses_num,
@@ -224,7 +268,7 @@ def create_stroke():
 
         client.query(
             q.create(
-                q.collection("strokes"),
+                q.collection("strokes_2"),
                 {"data": combined_stats},
             )
         )
